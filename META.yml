@@ -52,8 +52,10 @@ requires:
   Digest::SHA: '0'
   perl: v5.42.0
 resources:
+  bugtracker: https://github.com/sanko/Noise.pm/issues
+  homepage: https://github.com/sanko/Noise.pm
   license: http://www.perlfoundation.org/artistic_license_2_0
-  repository: git://github.com/sanko/protocol-noise.git
+  repository: git://github.com/sanko/Noise.pm.git
 version: v0.0.1
 x_ignore:
   - .tidyallrc

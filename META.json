@@ -79,13 +79,17 @@
    },
    "release_status" : "stable",
    "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/sanko/Noise.pm/issues"
+      },
+      "homepage" : "https://github.com/sanko/Noise.pm",
       "license" : [
          "http://www.perlfoundation.org/artistic_license_2_0"
       ],
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/sanko/protocol-noise.git",
-         "web" : "https://github.com/sanko/protocol-noise"
+         "url" : "git://github.com/sanko/Noise.pm.git",
+         "web" : "https://github.com/sanko/Noise.pm"
       }
    },
    "version" : "v0.0.1",
