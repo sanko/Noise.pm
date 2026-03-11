@@ -2,11 +2,11 @@ use v5.42.0;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Protocol::Noise v0.1.0 {
-    use Protocol::Noise::HandshakeState;
-    use Protocol::Noise::CipherState;
-    use Protocol::Noise::SymmetricState;
-    use Protocol::Noise::Pattern;
+class Noise v0.0.1 {
+    use Noise::HandshakeState;
+    use Noise::CipherState;
+    use Noise::SymmetricState;
+    use Noise::Pattern;
     use Crypt::PK::X25519;
     #
     field $handshake_state;
@@ -15,7 +15,7 @@ class Protocol::Noise v0.1.0 {
     method initialize_handshake (%params) {
 
         # Params: pattern, initiator, s, e, rs, re
-        $handshake_state = Protocol::Noise::HandshakeState->new(
+        $handshake_state = Noise::HandshakeState->new(
             prologue  => $prologue,
             pattern   => $params{pattern}   // 'XX',
             initiator => $params{initiator} // 1,

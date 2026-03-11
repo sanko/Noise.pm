@@ -2,7 +2,7 @@ use v5.42.0;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Protocol::Noise::CipherState v0.0.1 {
+class Noise::CipherState v0.0.1 {
     use Crypt::AuthEnc::ChaCha20Poly1305;
     use Crypt::AuthEnc::GCM;
     #
@@ -21,7 +21,7 @@ class Protocol::Noise::CipherState v0.0.1 {
         my $nonce;
         if ( $cipher eq 'ChaChaPoly' ) {
 
-            # Noise: 32-bit zeros + 64-bit Little Endian counter
+            # Noise: 32bit zeros + 64bit Little Endian counter
             $nonce = pack( 'L<', 0 ) . pack( 'Q<', $n++ );
             say "[DEBUG] Cipher encrypt: cipher=$cipher, k=" .
                 unpack( 'H*', $k ) .
@@ -35,12 +35,12 @@ class Protocol::Noise::CipherState v0.0.1 {
         }
         elsif ( $cipher eq 'AESGCM' ) {
 
-            # Noise: 32-bit zeros + 64-bit Big Endian counter
+            # Noise: 32bit zeros + 64bit Big Endian counter
             $nonce = pack( 'L>', 0 ) . pack( 'Q>', $n++ );
             say "[DEBUG] Cipher encrypt: cipher=$cipher, k=" .
                 unpack( 'H*', $k ) .
                 ", nonce=" .
-                unpack( 'H*', $nonce ) . ", ad=" .
+                unpack( 'H*', $nonce ) . ', ad=' .
                 unpack( 'H*', $ad )
                 if $ENV{NOISE_DEBUG};
             my $ae = Crypt::AuthEnc::GCM->new( 'AES', $k, $nonce );
@@ -62,7 +62,7 @@ class Protocol::Noise::CipherState v0.0.1 {
             say "[DEBUG] Cipher decrypt: cipher=$cipher, k=" .
                 unpack( 'H*', $k ) .
                 ", nonce=" .
-                unpack( 'H*', $nonce ) . ", ad=" .
+                unpack( 'H*', $nonce ) . ', ad=' .
                 unpack( 'H*', $ad )
                 if $ENV{NOISE_DEBUG};
             my $ae = Crypt::AuthEnc::ChaCha20Poly1305->new( $k, $nonce );
@@ -78,7 +78,7 @@ class Protocol::Noise::CipherState v0.0.1 {
             say "[DEBUG] Cipher decrypt: cipher=$cipher, k=" .
                 unpack( 'H*', $k ) .
                 ", nonce=" .
-                unpack( 'H*', $nonce ) . ", ad=" .
+                unpack( 'H*', $nonce ) . ', ad=' .
                 unpack( 'H*', $ad )
                 if $ENV{NOISE_DEBUG};
             my $ae = Crypt::AuthEnc::GCM->new( 'AES', $k, $nonce );

@@ -2,17 +2,19 @@ use v5.42.0;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Protocol::Noise::HandshakeState v0.0.1 {
-    use Protocol::Noise::SymmetricState;
-    use Protocol::Noise::Pattern;
+class Noise::HandshakeState v0.0.1 {
+    use Noise::SymmetricState;
+    use Noise::Pattern;
     use Crypt::PK::X25519;
     use Crypt::PK::ECC;
+    #
     my %DH_CONFIG = (
-        '25519' => { class => 'Crypt::PK::X25519', pub_len => 32 },
-        'P256'  => { class => 'Crypt::PK::ECC',    pub_len => 65,  params => 'secp256r1' },
-        'P384'  => { class => 'Crypt::PK::ECC',    pub_len => 97,  params => 'secp384r1' },
-        'P521'  => { class => 'Crypt::PK::ECC',    pub_len => 133, params => 'secp521r1' },
+        25519 => { class => 'Crypt::PK::X25519', pub_len => 32 },
+        P256  => { class => 'Crypt::PK::ECC',    pub_len => 65,  params => 'secp256r1' },
+        P384  => { class => 'Crypt::PK::ECC',    pub_len => 97,  params => 'secp384r1' },
+        P521  => { class => 'Crypt::PK::ECC',    pub_len => 133, params => 'secp521r1' }
     );
+    #
     field $s    : param //= undef;             # Local static key
     field $e    : param //= undef;             # Local ephemeral key
     field $rs   : reader : param //= undef;    # Remote static public key
@@ -26,6 +28,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
     field $msg_idx = 0;
     field $dh_name;
     field $dh_len;
+    #
     ADJUST {
         my $full_name = $pattern;
         if ( $full_name !~ /^Noise(?:PSK)?_/ ) {
@@ -42,10 +45,10 @@ class Protocol::Noise::HandshakeState v0.0.1 {
         my $noise_name = 'Noise_' . $p_name . '_' . $dh . '_' . $cipher_name . '_' . $hash_name;
         $dh_name = $dh;
         $dh_len  = $DH_CONFIG{$dh_name}->{pub_len} or die "Unsupported DH: $dh_name";
-        if ( ref $pattern ne 'Protocol::Noise::Pattern' ) {
-            $pattern = Protocol::Noise::Pattern->new( name => $p_name );
+        if ( ref $pattern ne 'Noise::Pattern' ) {
+            $pattern = Noise::Pattern->new( name => $p_name );
         }
-        $symmetric_state = Protocol::Noise::SymmetricState->new( cipher => $cipher_name, hash => $hash_name );
+        $symmetric_state = Noise::SymmetricState->new( cipher => $cipher_name, hash => $hash_name );
         $symmetric_state->initialize_symmetric($full_name);    # using full_name matched noise-c Vector 16 better
 
         # Mix prologue (always mixed, even if empty)
@@ -78,11 +81,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
             }
         }
     }
-
-    method _new_dh_obj {
-        my $cfg = $DH_CONFIG{$dh_name};
-        return $cfg->{class}->new();
-    }
+    method _new_dh_obj { $DH_CONFIG{$dh_name}->{class}->new() }
 
     method _dh_generate_key($obj) {
         if ( $dh_name =~ /^P/ ) {
@@ -112,22 +111,18 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                 my $pub = $e->export_key_raw('public');
                 $message .= $pub;
                 $symmetric_state->mix_hash($pub);
-                if ( $pattern->has_psk ) { $symmetric_state->mix_key($pub); }
+                $symmetric_state->mix_key($pub) if $pattern->has_psk;
             }
             elsif ( $token eq 's' ) {
                 my $pub = $s->export_key_raw('public');
                 $message .= $symmetric_state->encrypt_and_hash($pub);
-                if ( $pattern->has_psk ) { $symmetric_state->mix_key($pub); }
+                $symmetric_state->mix_key($pub) if $pattern->has_psk;
             }
-            elsif ( $token eq 'ee' ) {
-
-                # ee: DH(initiator_e, responder_e)
+            elsif ( $token eq 'ee' ) {    # ee: DH(initiator_e, responder_e)
                 die 'ee failed: e or re undefined' unless $e && $re;
                 $symmetric_state->mix_key( $e->shared_secret($re) );
             }
-            elsif ( $token eq 'es' ) {
-
-                # es: DH(initiator_e, responder_s)
+            elsif ( $token eq 'es' ) {    # es: DH(initiator_e, responder_s)
                 if ($initiator) {
                     die 'es failed: e or rs undefined' unless $e && $rs;
                     $symmetric_state->mix_key( $e->shared_secret($rs) );
@@ -137,9 +132,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                     $symmetric_state->mix_key( $s->shared_secret($re) );
                 }
             }
-            elsif ( $token eq 'se' ) {
-
-                # se: DH(initiator_s, responder_e)
+            elsif ( $token eq 'se' ) {    # se: DH(initiator_s, responder_e)
                 if ($initiator) {
                     die 'se failed: s or re undefined' unless $s && $re;
                     $symmetric_state->mix_key( $s->shared_secret($re) );
@@ -149,9 +142,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                     $symmetric_state->mix_key( $e->shared_secret($rs) );
                 }
             }
-            elsif ( $token eq 'ss' ) {
-
-                # ss: DH(initiator_s, responder_s)
+            elsif ( $token eq 'ss' ) {    # ss: DH(initiator_s, responder_s)
                 die 'ss failed: s or rs undefined' unless $s && $rs;
                 $symmetric_state->mix_key( $s->shared_secret($rs) );
             }
@@ -159,8 +150,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                 $symmetric_state->mix_key_and_hash( $psks->[ $psk_idx++ ] // die 'Missing PSK at index ' . $psk_idx );
             }
         }
-        $message .= $symmetric_state->encrypt_and_hash($payload);
-        return $message;
+        return $message . $symmetric_state->encrypt_and_hash($payload);
     }
 
     method read_message ($message) {
@@ -182,17 +172,13 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                 my $pub_raw = $symmetric_state->decrypt_and_hash($ct);
                 $rs = $self->_new_dh_obj();
                 $self->_dh_import_key( $rs, $pub_raw, 'public' );
-                if ( $pattern->has_psk ) { $symmetric_state->mix_key($pub_raw); }
+                $symmetric_state->mix_key($pub_raw) if $pattern->has_psk;
             }
-            elsif ( $token eq 'ee' ) {
-
-                # ee: DH(initiator_e, responder_e)
+            elsif ( $token eq 'ee' ) {    # ee: DH(initiator_e, responder_e)
                 die 'ee failed: e or re undefined' unless $e && $re;
                 $symmetric_state->mix_key( $e->shared_secret($re) );
             }
-            elsif ( $token eq 'es' ) {
-
-                # es: DH(initiator_e, responder_s)
+            elsif ( $token eq 'es' ) {    # es: DH(initiator_e, responder_s)
                 if ($initiator) {
                     die 'es failed: e or rs undefined' unless $e && $rs;
                     $symmetric_state->mix_key( $e->shared_secret($rs) );
@@ -202,9 +188,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                     $symmetric_state->mix_key( $s->shared_secret($re) );
                 }
             }
-            elsif ( $token eq 'se' ) {
-
-                # se: DH(initiator_s, responder_e)
+            elsif ( $token eq 'se' ) {    # se: DH(initiator_s, responder_e)
                 if ($initiator) {
                     die 'se failed: s or re undefined' unless $s && $re;
                     $symmetric_state->mix_key( $s->shared_secret($re) );
@@ -214,9 +198,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
                     $symmetric_state->mix_key( $e->shared_secret($rs) );
                 }
             }
-            elsif ( $token eq 'ss' ) {
-
-                # ss: DH(initiator_s, responder_s)
+            elsif ( $token eq 'ss' ) {    # ss: DH(initiator_s, responder_s)
                 die 'ss failed: s or rs undefined' unless $s && $rs;
                 $symmetric_state->mix_key( $s->shared_secret($rs) );
             }
@@ -227,10 +209,7 @@ class Protocol::Noise::HandshakeState v0.0.1 {
         my $payload = $symmetric_state->decrypt_and_hash( substr( $message, $pos ) );
         return $payload;
     }
-
-    method split () {
-        return $symmetric_state->split();
-    }
+    method split () { $symmetric_state->split() }
 };
 #
 1;

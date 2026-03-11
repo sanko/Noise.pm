@@ -21,7 +21,7 @@
       "url" : "https://metacpan.org/pod/CPAN::Meta::Spec",
       "version" : 2
    },
-   "name" : "Protocol-Noise",
+   "name" : "Noise",
    "no_index" : {
       "directory" : [
          "t",
@@ -31,8 +31,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.034",
-            "Path::Tiny" : "0"
+            "Module::Build::Tiny" : "0"
          }
       },
       "runtime" : {
@@ -53,28 +52,28 @@
       }
    },
    "provides" : {
-      "Protocol::Noise" : {
-         "file" : "lib/Protocol/Noise.pm",
-         "version" : "v0.1.0"
-      },
-      "Protocol::Noise::CipherState" : {
-         "file" : "lib/Protocol/Noise/CipherState.pm",
+      "Noise" : {
+         "file" : "lib/Noise.pm",
          "version" : "v0.0.1"
       },
-      "Protocol::Noise::HandshakeState" : {
-         "file" : "lib/Protocol/Noise/HandshakeState.pm",
+      "Noise::CipherState" : {
+         "file" : "lib/Noise/CipherState.pm",
          "version" : "v0.0.1"
       },
-      "Protocol::Noise::Pattern" : {
-         "file" : "lib/Protocol/Noise/Pattern.pm",
+      "Noise::HandshakeState" : {
+         "file" : "lib/Noise/HandshakeState.pm",
          "version" : "v0.0.1"
       },
-      "Protocol::Noise::Stream" : {
-         "file" : "lib/Protocol/Noise/Stream.pm",
+      "Noise::Pattern" : {
+         "file" : "lib/Noise/Pattern.pm",
          "version" : "v0.0.1"
       },
-      "Protocol::Noise::SymmetricState" : {
-         "file" : "lib/Protocol/Noise/SymmetricState.pm",
+      "Noise::Stream" : {
+         "file" : "lib/Noise/Stream.pm",
+         "version" : "v0.0.1"
+      },
+      "Noise::SymmetricState" : {
+         "file" : "lib/Noise/SymmetricState.pm",
          "version" : "v0.0.1"
       }
    },
@@ -89,7 +88,7 @@
          "web" : "https://github.com/sanko/protocol-noise"
       }
    },
-   "version" : "v0.1.0",
+   "version" : "v0.0.1",
    "x_ignore" : [
       ".tidyallrc",
       ".gitignore",

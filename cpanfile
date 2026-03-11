@@ -5,8 +5,7 @@ requires 'Crypt::PK::X25519';
 requires 'Digest::SHA';
 requires 'perl', 'v5.42.0';
 on configure => sub {
-    requires 'Module::Build::Tiny', '0.034';
-    requires 'Path::Tiny';
+    requires 'Module::Build::Tiny';
 };
 on test => sub {
     requires 'IO::Socket::INET';

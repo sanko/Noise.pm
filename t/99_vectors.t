@@ -4,7 +4,7 @@ use feature 'try';
 use Test2::V0;
 use JSON::PP;
 use FindBin qw[$RealDir];
-use Protocol::Noise;
+use Noise;
 use Crypt::PK::X25519;
 use Crypt::PK::ECC;
 use File::Spec;
@@ -155,12 +155,11 @@ for my $cat ( $target_vector // qw[cacophony noise-c-basic noise-c-fallback nois
 }
 done_testing();
 
-sub run_vector {
-    my ($vector)  = @_;
+sub run_vector ($vector) {
     my $name      = $vector->{protocol_name} // $vector->{name};
     my $prologue  = h2b( $vector->{init_prologue} );
-    my $alice     = Protocol::Noise->new( prologue => $prologue );
-    my $bob       = Protocol::Noise->new( prologue => $prologue );
+    my $alice     = Noise->new( prologue => $prologue );
+    my $bob       = Noise->new( prologue => $prologue );
     my $init_psks = $vector->{init_psks} // ( defined $vector->{init_psk} ? [ $vector->{init_psk} ] : [] );
     my $resp_psks = $vector->{resp_psks} // ( defined $vector->{resp_psk} ? [ $vector->{resp_psk} ] : [] );
     $alice->initialize_handshake(
@@ -184,7 +183,7 @@ sub run_vector {
     my $msg_index          = 0;
     my $is_oneway          = ( $name =~ /^Noise(?:PSK)?_[NKX]_/ );
 
-    foreach my $m ( @{ $vector->{messages} } ) {
+    for my $m ( @{ $vector->{messages} } ) {
         my $payload   = h2b( $m->{payload} );
         my $expect_ct = h2b( $m->{ciphertext} );
         my $is_alice  = $is_oneway ? 1 : ( $msg_index % 2 == 0 );

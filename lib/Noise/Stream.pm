@@ -2,26 +2,23 @@ use v5.42.0;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Protocol::Noise::Stream v0.0.1 {
-    use Protocol::Noise::CipherState;
+class Noise::Stream v0.0.1 {
+    use Noise::CipherState;
     use IO::Socket::INET;
     use Errno qw[EAGAIN EWOULDBLOCK];
     #
     field $socket : param : reader;
-    field $c_send : param;    # Protocol::Noise::CipherState
-    field $c_recv : param;    # Protocol::Noise::CipherState
+    field $c_send : param;    # Noise::CipherState
+    field $c_recv : param;    # Noise::CipherState
     field $raw_recv_buffer  = '';
     field $decrypted_buffer = '';
-    field $initial_buffer : param //= '';
+    field $initial_buffer : param //= $raw_recv_buffer;
     #
     ADJUST {
         $socket->blocking(0);
-        $raw_recv_buffer = $initial_buffer;
     }
 
     method write_bin ($data) {
-
-        # Nonce management is now inside CipherState
         my $payload  = $c_send->encrypt_with_ad( '', $data );
         my $prefixed = pack( 'n', length($payload) ) . $payload;
         my $written  = 0;
@@ -80,8 +77,8 @@ class Protocol::Noise::Stream v0.0.1 {
         $decrypted_buffer = '';
         return $res;
     }
-    method rekey_send () { $c_send->rekey(); }
-    method rekey_recv () { $c_recv->rekey(); }
+    method rekey_send () { $c_send->rekey() }
+    method rekey_recv () { $c_recv->rekey() }
     method close ()      { $socket->close() }
 };
 #

@@ -1,12 +1,16 @@
+=pod
+
+=encoding utf-8
+
 =head1 NAME
 
-Protocol::Noise::SymmetricState - Cryptographic transcript and chaining key management
+Noise::SymmetricState - Cryptographic transcript and chaining key management
 
 =head1 SYNOPSIS
 
-    use Protocol::Noise::SymmetricState;
+    use Noise::SymmetricState;
 
-    my $state = Protocol::Noise::SymmetricState->new(
+    my $state = Noise::SymmetricState->new(
         hash   => 'SHA256',
         cipher => 'ChaChaPoly'
     );
@@ -19,8 +23,8 @@ Protocol::Noise::SymmetricState - Cryptographic transcript and chaining key mana
 
 =head1 DESCRIPTION
 
-Protocol::Noise::SymmetricState manages the two primary variables of a Noise handshake: the handshake hash (C<h>) and
-the chaining key (C<ck>).
+Noise::SymmetricState manages the two primary variables of a Noise handshake: the handshake hash (C<h>) and the
+chaining key (C<ck>).
 
 It ensures that all messages sent or received are incorporated into the transcript and that encryption keys are derived
 correctly according to the Noise specification.
@@ -59,8 +63,8 @@ A specialized version of key and hash mixing used primarily for pre-shared keys 
 
 =head2 C<encrypt_and_hash( $plaintext )>
 
-Encrypts C<$plaintext> using the internal L<Protocol::Noise::CipherState> and then incorporates the resulting
-ciphertext into the handshake hash.
+Encrypts C<$plaintext> using the internal L<Noise::CipherState> and then incorporates the resulting ciphertext into the
+handshake hash.
 
 =head2 C<decrypt_and_hash( $ciphertext )>
 
@@ -68,8 +72,7 @@ Decrypts C<$ciphertext> and incorporates it into the handshake hash.
 
 =head2 C<split( )>
 
-Finalizes the handshake phase. Returns two L<Protocol::Noise::CipherState> objects, one for each direction of
-communication.
+Finalizes the handshake phase. Returns two L<Noise::CipherState> objects, one for each direction of communication.
 
 =head2 C<h( )>
 
@@ -84,12 +87,12 @@ exchange occurs. It ensures that future keys are cryptographically linked to all
 
 =head2 C<cipher_state( )>
 
-Returns the underlying L<Protocol::Noise::CipherState> object. This object manages the encryption key derived from the
-chaining key and handles the actual symmetric cryptographic operations.
+Returns the underlying L<Noise::CipherState> object. This object manages the encryption key derived from the chaining
+key and handles the actual symmetric cryptographic operations.
 
 =head1 SEE ALSO
 
-L<Protocol::Noise::CipherState>, L<Protocol::Noise::HandshakeState>
+L<Noise::CipherState>, L<Noise::HandshakeState>
 
 =head1 AUTHOR
 

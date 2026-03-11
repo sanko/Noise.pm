@@ -6,8 +6,7 @@ build_requires:
   IO::Socket::INET: '0'
   Test2::V0: '0'
 configure_requires:
-  Module::Build::Tiny: '0.034'
-  Path::Tiny: '0'
+  Module::Build::Tiny: '0'
 dynamic_config: 1
 generated_by: 'App::mii v1.0.0, CPAN::Meta::Converter version 2.150012'
 keywords:
@@ -21,29 +20,29 @@ license: artistic_2
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
-name: Protocol-Noise
+name: Noise
 no_index:
   directory:
     - t
     - eg
 provides:
-  Protocol::Noise:
-    file: lib/Protocol/Noise.pm
-    version: v0.1.0
-  Protocol::Noise::CipherState:
-    file: lib/Protocol/Noise/CipherState.pm
+  Noise:
+    file: lib/Noise.pm
     version: v0.0.1
-  Protocol::Noise::HandshakeState:
-    file: lib/Protocol/Noise/HandshakeState.pm
+  Noise::CipherState:
+    file: lib/Noise/CipherState.pm
     version: v0.0.1
-  Protocol::Noise::Pattern:
-    file: lib/Protocol/Noise/Pattern.pm
+  Noise::HandshakeState:
+    file: lib/Noise/HandshakeState.pm
     version: v0.0.1
-  Protocol::Noise::Stream:
-    file: lib/Protocol/Noise/Stream.pm
+  Noise::Pattern:
+    file: lib/Noise/Pattern.pm
     version: v0.0.1
-  Protocol::Noise::SymmetricState:
-    file: lib/Protocol/Noise/SymmetricState.pm
+  Noise::Stream:
+    file: lib/Noise/Stream.pm
+    version: v0.0.1
+  Noise::SymmetricState:
+    file: lib/Noise/SymmetricState.pm
     version: v0.0.1
 requires:
   Crypt::AuthEnc::ChaCha20Poly1305: '0'
@@ -55,7 +54,7 @@ requires:
 resources:
   license: http://www.perlfoundation.org/artistic_license_2_0
   repository: git://github.com/sanko/protocol-noise.git
-version: v0.1.0
+version: v0.0.1
 x_ignore:
   - .tidyallrc
   - .gitignore

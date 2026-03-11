@@ -1,8 +1,8 @@
 use v5.42.0;
 use lib 'lib';
 use Test2::V0;
-use Protocol::Noise::Stream;
-use Protocol::Noise::CipherState;
+use Noise::Stream;
+use Noise::CipherState;
 use IO::Socket::INET;
 #
 my $listener = IO::Socket::INET->new( LocalAddr => '127.0.0.1', LocalPort => 0, Listen => 1, ReuseAddr => 1 ) or
@@ -19,16 +19,16 @@ $server_sock->blocking(0);
 # Simple keys for testing
 my $key_a        = 'A' x 32;
 my $key_b        = 'B' x 32;
-my $c_alice_send = Protocol::Noise::CipherState->new();
+my $c_alice_send = Noise::CipherState->new();
 $c_alice_send->set_key($key_a);
-my $c_alice_recv = Protocol::Noise::CipherState->new();
+my $c_alice_recv = Noise::CipherState->new();
 $c_alice_recv->set_key($key_b);
-my $c_bob_send = Protocol::Noise::CipherState->new();
+my $c_bob_send = Noise::CipherState->new();
 $c_bob_send->set_key($key_b);
-my $c_bob_recv = Protocol::Noise::CipherState->new();
+my $c_bob_recv = Noise::CipherState->new();
 $c_bob_recv->set_key($key_a);
-my $alice = Protocol::Noise::Stream->new( socket => $client_sock, c_send => $c_alice_send, c_recv => $c_alice_recv, );
-my $bob   = Protocol::Noise::Stream->new( socket => $server_sock, c_send => $c_bob_send,   c_recv => $c_bob_recv, );
+my $alice = Noise::Stream->new( socket => $client_sock, c_send => $c_alice_send, c_recv => $c_alice_recv, );
+my $bob   = Noise::Stream->new( socket => $server_sock, c_send => $c_bob_send,   c_recv => $c_bob_recv, );
 
 # Alice sends to Bob
 $alice->write_bin('Hello Bob');

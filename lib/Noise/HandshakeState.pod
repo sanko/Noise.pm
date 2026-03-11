@@ -1,12 +1,16 @@
+=pod
+
+=encoding utf-8
+
 =head1 NAME
 
-Protocol::Noise::HandshakeState - Pattern-based handshake execution
+Noise::HandshakeState - Pattern-based handshake execution
 
 =head1 SYNOPSIS
 
-    use Protocol::Noise::HandshakeState;
+    use Noise::HandshakeState;
 
-    my $state = Protocol::Noise::HandshakeState->new(
+    my $state = Noise::HandshakeState->new(
         initiator => 1,
         pattern   => 'XX',
         s         => $local_static_key
@@ -20,8 +24,8 @@ Protocol::Noise::HandshakeState - Pattern-based handshake execution
 
 =head1 DESCRIPTION
 
-Protocol::Noise::HandshakeState implements the high-level handshake logic of the Noise Protocol. It parses pattern
-names, processes pre-messages, and executes the sequence of tokens (e, s, ee, es, etc.) required to establish a secure
+Noise::HandshakeState implements the high-level handshake logic of the Noise Protocol. It parses pattern names,
+processes pre-messages, and executes the sequence of tokens (e, s, ee, es, etc.) required to establish a secure
 channel.
 
 =head1 METHODS
@@ -58,12 +62,12 @@ Parses an incoming message, updates the internal state, and returns the decrypte
 
 =head2 C<split( )>
 
-Finalizes the handshake and returns a pair of L<Protocol::Noise::CipherState> objects for transport.
+Finalizes the handshake and returns a pair of L<Noise::CipherState> objects for transport.
 
 =head2 C<symmetric_state( )>
 
-Returns the underlying L<Protocol::Noise::SymmetricState> object. This is useful for advanced use cases where manual
-mixing of additional data into the handshake transcript is required.
+Returns the underlying L<Noise::SymmetricState> object. This is useful for advanced use cases where manual mixing of
+additional data into the handshake transcript is required.
 
 =head2 C<rs( )>
 
@@ -77,7 +81,7 @@ available after the first message from the remote party.
 
 =head1 SEE ALSO
 
-L<Protocol::Noise::Pattern>, L<Protocol::Noise::SymmetricState>
+L<Noise::Pattern>, L<Noise::SymmetricState>
 
 =head1 AUTHOR
 

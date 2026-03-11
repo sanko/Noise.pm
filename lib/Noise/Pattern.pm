@@ -2,7 +2,7 @@ use v5.42.0;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Protocol::Noise::Pattern v0.0.1 {
+class Noise::Pattern v0.0.1 {
 
     # Noise handshake patterns (rundamental + deferred + one-way)
     # https://noiseprotocol.org/noise.html#handshake-patterns
@@ -54,10 +54,12 @@ class Protocol::Noise::Pattern v0.0.1 {
         IX1  => { pre_msg => [ [], [] ],    msg_seq => [ [ 'e', 's' ], [ 'e', 'ee', 'se', 's' ], ['es'] ] },
         I1X1 => { pre_msg => [ [], [] ],    msg_seq => [ [ 'e', 's' ], [ 'e', 'ee', 's' ], [ 'se', 'es' ] ] },
     );
+    #
     field $name    : reader : param;
     field $pre_msg : reader;
     field $msg_seq : reader;
     field $has_psk : reader = 0;
+    #
     ADJUST {
         my $base_name = $name;
         my @psk_modifiers;

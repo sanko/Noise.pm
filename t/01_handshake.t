@@ -1,7 +1,7 @@
 use v5.42.0;
 use blib;
 use Test2::V0;
-use Protocol::Noise;
+use Noise;
 use Crypt::PK::X25519;
 #
 subtest 'Generic Handshake XX' => sub {
@@ -9,9 +9,9 @@ subtest 'Generic Handshake XX' => sub {
     $alice_s->generate_key();
     my $bob_s = Crypt::PK::X25519->new();
     $bob_s->generate_key();
-    my $alice = Protocol::Noise->new();
+    my $alice = Noise->new();
     $alice->initialize_handshake( pattern => 'XX', initiator => 1, s => $alice_s );
-    my $bob = Protocol::Noise->new();
+    my $bob = Noise->new();
     $bob->initialize_handshake( pattern => 'XX', initiator => 0, s => $bob_s );
 
     # Alice -> Bob (e)
@@ -36,9 +36,9 @@ subtest 'Generic Handshake XX' => sub {
     is unpack( 'H*', $alice_c2->k ), unpack( 'H*', $bob_c2->k ), 'Transport key 2 matches';
 };
 subtest 'Generic Handshake NN' => sub {
-    my $alice = Protocol::Noise->new();
+    my $alice = Noise->new();
     $alice->initialize_handshake( pattern => 'NN', initiator => 1 );
-    my $bob = Protocol::Noise->new();
+    my $bob = Noise->new();
     $bob->initialize_handshake( pattern => 'NN', initiator => 0 );
 
     # Alice -> Bob (e)
@@ -60,9 +60,9 @@ subtest 'PSK Handshake XXpsk3' => sub {
     $alice_s->generate_key();
     my $bob_s = Crypt::PK::X25519->new();
     $bob_s->generate_key();
-    my $alice = Protocol::Noise->new();
+    my $alice = Noise->new();
     $alice->initialize_handshake( pattern => 'Noise_XXpsk3_25519_ChaChaPoly_SHA256', initiator => 1, s => $alice_s, psks => [$psk] );
-    my $bob = Protocol::Noise->new();
+    my $bob = Noise->new();
     $bob->initialize_handshake( pattern => 'Noise_XXpsk3_25519_ChaChaPoly_SHA256', initiator => 0, s => $bob_s, psks => [$psk] );
 
     # Msg 1: -> e

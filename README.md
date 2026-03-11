@@ -1,14 +1,14 @@
 # NAME
 
-Protocol::Noise - Pure-Perl implementation of the Noise Protocol Framework
+Noise - Pure Perl implementation of the Noise Protocol Framework
 
 # SYNOPSIS
 
 ```perl
-use Protocol::Noise;
+use Noise;
 
 # Initialize state for Noise_XX_25519_ChaChaPoly_SHA256
-my $alice = Protocol::Noise->new( );
+my $alice = Noise->new( );
 $alice->initialize_state( );
 
 # Handshake Pattern: XX
@@ -25,8 +25,8 @@ my ( $send_key, $recv_key ) = $alice->split_for_transport( );
 
 # DESCRIPTION
 
-`Protocol::Noise` implements the Noise Protocol Framework, a modern cryptographic construction for building
-high-performance, secure  communications protocols.
+`Noise` implements the Noise Protocol Framework, a modern cryptographic construction for building high-performance,
+secure  communications protocols.
 
 This implementation provides the foundational SymmetricState and CipherState logic, as well as helper methods for
 executing handshake  patterns like XX.
@@ -83,13 +83,13 @@ Finalizes the handshake and returns two 32-byte keys for secure communication.
 # Handshake Patterns
 
 While this module provides low-level primitives, it is recommended to use higher-level wrappers (like
-[Net::Libp2p::Protocol::Noise](https://metacpan.org/pod/Net%3A%3ALibp2p%3A%3AProtocol%3A%3ANoise)) for specific application integrations.
+[Net::Libp2p::Noise](https://metacpan.org/pod/Net%3A%3ALibp2p%3A%3ANoise)) for specific application integrations.
 
 # SEE ALSO
 
-[Protocol::Noise::Stream](https://metacpan.org/pod/Protocol%3A%3ANoise%3A%3AStream), [https://noiseprotocol.org/](https://noiseprotocol.org/)
+[Noise::Stream](https://metacpan.org/pod/Noise%3A%3AStream), [https://noiseprotocol.org/](https://noiseprotocol.org/)
 
-[Crypt::Protocol::Noise](https://metacpan.org/pod/Crypt%3A%3AProtocol%3A%3ANoise) is an earlier implementation.
+[Crypt::Noise](https://metacpan.org/pod/Crypt%3A%3ANoise) is an earlier implementation.
 
 # AUTHOR
 
